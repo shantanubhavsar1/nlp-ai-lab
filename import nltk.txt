@@ -1,0 +1,26 @@
+import nltk
+from nltk.tokenize import sent_tokenize, word_tokenize
+from gensim.models import Word2Vec
+
+# Sample paragraph
+paragraph = "Natural language processing enables computers to understand human language. Word2Vec is a technique to convert words into vectors."
+
+# Download NLTK data (if not already done)
+nltk.download('punkt')
+
+# Tokenize paragraph into sentences, then words
+sentences = sent_tokenize(paragraph)
+words = [word_tokenize(sentence) for sentence in sentences]
+
+# Train Word2Vec model
+model = Word2Vec(words, vector_size=100, window=5, min_count=1, workers=4)
+
+# Get vector for a word
+vector = model.wv['language']
+print("Vector for 'language':", vector)
+
+# Get vectors for all words in the paragraph
+word_vectors = {word: model.wv[word] for sentence in words for word in sentence if word in model.wv}
+print("Word vectors for paragraph:")
+for word, vec in word_vectors.items():
+    print(word, vec)
